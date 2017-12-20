@@ -60,7 +60,7 @@ or
 * created — integer or array, timestamp. A timestamp to filter posts by created date. When two timestamps in the array provided it returns only posts between this timestamps.
 * published — integer or array, timestamp. A timestamp to filter posts by published date. When two timestamps in the array provided it returns only posts between this timestamps.
 * author — uuid, to filter posts by its author.
-* tags — array of tag's slugs to filter by. You can use `-tag` to filter *out* post that *have* this tag.
+* tags — array of tag's slugs to filter by. You can use `-tag` to filter *out* posts that *have* this tag.
 * order — string, the field name to order the posts by. Possible values `published`, `-published`, `created`, `-created`.
 * limit — number, limit the number of returned posts. Can't be bigger than the limit in the settings.
 * quantity — boolean, returns a number of posts instead of posts itself.
