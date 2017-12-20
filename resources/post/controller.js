@@ -38,6 +38,8 @@ Controller.prototype.schema = {
   }
 };
 
+Controller.prototype.__initRequired = true;
+
 Controller.prototype.__init = function(units) {
   this.table = this.schema.post.table;
   this.slugs = this.schema.slug.table;
@@ -193,7 +195,6 @@ Controller.prototype.select = function(opts) {
 
   if (!(opts.id || opts.slug)) {
     q = this.filter(q, opts);
-
   }
 
   return q.default(r.error('Not found'));
@@ -297,20 +298,40 @@ Controller.prototype.filterAuthor = function(query, value) {
   return query;
 };
 
-Controller.prototype.filterTags = function(query, value) {
-  if (
-    !value || value === 'all' || value === 'everything' ||
-    value[0] === 'all' || value[0] === 'everything'
-  ) {
+Controller.prototype.filterTags = function(query, tags) {
+  if (!tags) {
     return query;
   }
 
-  value = isArray(value) ? value : [ value ]
+  const present = [];
+  const absent = [];
+  for (const i in tags) {
+    const tag = tags[i];
+    if (tag[0] === '-') {
+      absent.push(tag.substr(1))
+    } else {
+      present.push(tag);
+    }
+  }
 
   const r = this.r;
-  return query.filter(
-    r.row('tags').contains(r.args(value))
-  );
+
+  if (present.length) {
+    query = query.filter(
+      r.row('tags').contains(r.args(present))
+    );
+  }
+
+  if (absent.length) {
+    query = query.filter(
+      r.or(
+        r.row.hasFields('tags').not(),
+        r.row('tags').contains(r.args(absent)).not()
+      )
+    );
+  }
+
+  return query;
 };
 
 // includes

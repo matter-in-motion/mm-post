@@ -15,8 +15,11 @@ module.exports = {
 
   get: function() {
     const include = {
-      type: 'string',
-      enum: this.includes()
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: this.includes()
+      }
     };
 
     const id = {
@@ -65,7 +68,7 @@ module.exports = {
         },
         include
       }
-    }
+    };
 
     return {
       auth: {
@@ -75,11 +78,11 @@ module.exports = {
       title: 'Post',
       description: 'Returns a post or posts collection',
       request: {
-        oneOf: [ id, slug, collection ]
+        anyOf: [ id, slug, collection ]
       },
 
       response: {
-        oneOf: [
+        anyOf: [
           {
             type: 'array',
             items: types.post()

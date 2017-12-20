@@ -193,9 +193,9 @@ test.serial('gets posts by tag', t => post
   .then(res => t.is(res[0].id, post1.id))
 );
 
-test.serial('gets posts by tag', t => post
-  .get({ tags: 'tag' })
-  .then(res => t.is(res[0].id, post1.id))
+test.serial('gets posts by no tag', t => post
+  .get({ tags: [ '-tag' ] })
+  .then(res => t.is(res[0].id, post2.id))
 );
 
 test.serial('gets all draft posts', t => post
