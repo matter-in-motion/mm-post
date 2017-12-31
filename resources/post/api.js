@@ -110,7 +110,9 @@ module.exports = {
           }
         }
 
-        return this.get(data).catch(ReqlDriverError);
+        return this.get(data)
+          .catch(ReqlDriverError)
+          .catch(errors.ifError('NotFound'));
       }
     }
   },
@@ -141,7 +143,10 @@ module.exports = {
         if (auth.id) {
           data.author = auth.id;
         }
-        return this.create(data).catch(ReqlDriverError);
+        return this
+          .create(data)
+          .catch(ReqlDriverError)
+          .catch(errors.ifError('BadRequest'));
       }
     }
   },
@@ -183,6 +188,7 @@ module.exports = {
       call: (auth, data) => this
         .update(data.id, data.to)
         .catch(ReqlDriverError)
+        .catch(errors.ifError('BadRequest'))
     }
   },
 
@@ -240,6 +246,7 @@ module.exports = {
       call: (auth, data) => this
         .createNode(data.id, data.node, data.index)
         .catch(ReqlDriverError)
+        .catch(errors.ifError('NotFound'))
     }
   },
 
@@ -266,6 +273,7 @@ module.exports = {
       call: (auth, data) => this
         .deleteNode(data.id, data.nid)
         .catch(ReqlDriverError)
+        .catch(errors.ifError('NotFound'))
     }
   }
 };
