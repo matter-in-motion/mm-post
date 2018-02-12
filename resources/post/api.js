@@ -168,6 +168,7 @@ module.exports = {
           to: {
             type: 'object',
             additionalProperties: false,
+            minProperties: 1,
             properties: {
               slug: types.slug(),
               title: types.title(),
@@ -235,7 +236,13 @@ module.exports = {
             additionalProperties: false,
             required: [ 'type', 'content' ],
             properties: {
-              type: { type: 'string' }
+              type: { type: 'string' },
+              content: {
+                anyOf: [
+                  { type: 'string' },
+                  { type: 'object' }
+                ]
+              }
             }
           }
         }
