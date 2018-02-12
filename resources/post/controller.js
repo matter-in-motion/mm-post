@@ -143,6 +143,10 @@ Controller.prototype.update = function(id, to) {
 };
 
 Controller.prototype.didUpdate = function(changes) {
+  if (!changes) {
+    return false;
+  }
+
   return Promise.resolve(changes)
     .then(changes => {
       if (changes.old_val.slug !== undefined && changes.old_val.slug !== changes.new_val.slug) {
