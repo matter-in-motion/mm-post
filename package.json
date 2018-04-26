@@ -28,12 +28,12 @@
   "devDependencies": {
     "ava": "^0.25.0",
     "mm-db-schema": "^1.0.0",
-    "mm-node": "^1.0.0",
+    "mm-node": "^2.0.0",
     "mm-rethinkdb": "^1.0.0",
     "mm-rethinkdb-schema": "^1.0.0",
     "mm-rethinkdb-unique": "^1.0.0",
     "mm-test": "^3.0.0",
-    "mm-user": "^1.0.0",
+    "mm-user": "^2.0.0",
     "nyc": "^11.6.0"
   },
   "scripts": {

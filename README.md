@@ -21,32 +21,32 @@ This extension adds a __post__ resource. It also requires [mm-node](https://gith
 ## Settings
 
 * post
-  - limit — number, default 20. Global limit number of returned posts in collection
+  - limit — number, default 20. Global limit number of post collection
 
 ## Post
 
 The post is the ordered collection of nodes.
 
-* __id__ — uuid, id of the post
-* __slug__ — string, 60 chars max, a user- and SEO-friendly short unique text used in a URL to identify and describe post
+* __id__ — uuid, the id of the post.
+* __slug__ — string, 60 chars max, a user- and SEO-friendly short unique text used in a URL to identify and describe the post.
 * __title__ — string, 140 chars max.
 * __status__ — string, `draft`, `ready`, `published`. Default `draft`.
-* __created__ — integer. A timestamp when post was created
-* __published__ — integer. A timestamp when post was published
-* author — uuid or user data of the post's author
-* tags — array of tag's slugs
-* nodes — array of nodes ids
-* content — object with all nodes
+* __created__ — integer. A timestamp when the post is created.
+* __published__ — integer. A timestamp when the post is published.
+* author — uuid or user data of the post's author.
+* tags — the array of tag's slugs.
+* nodes — the array of nodes ids.
+* content — object with all nodes.
 
 ## API
 
 ### get
 
-Returns a post or posts collection
+Returns a post or posts collection.
 
 **Request**
 
-To all requests, you can add an `include` parameter that will add related data to the posts.
+To all requests, you can add the `include` parameter that adds related data to the posts.
 
 * **id** — post's id
 
@@ -57,10 +57,10 @@ or
 or
 
 * status — filter by post's status.
-* created — integer or array, timestamp. A timestamp to filter posts by created date. When two timestamps in the array provided it returns only posts between this timestamps.
-* published — integer or array, timestamp. A timestamp to filter posts by published date. When two timestamps in the array provided it returns only posts between this timestamps.
+* created — integer or array, timestamp, to filter the posts by created date. When two timestamps in the array provided, returns only posts between this timestamps.
+* published — integer or array, timestamp, to filter posts by published date. When two timestamps in the array provided, returns only posts between this timestamps.
 * author — uuid, to filter posts by its author.
-* tags — array of tag's slugs to filter by. You can use `-tag` to filter *out* posts that *have* this tag.
+* tags — an array of tag's slugs to filter by. You can use `-tag` to filter *out* posts that *have* this tag.
 * order — string, the field name to order the posts by. Possible values `published`, `-published`, `created`, `-created`.
 * limit — number, limit the number of returned posts. Can't be bigger than the limit in the settings.
 * quantity — boolean, returns a number of posts instead of posts itself.
@@ -79,7 +79,7 @@ Creates a new post.
 * __slug__ — post's slug
 * __title__ — string, 140 chars max.
 * status — string, `draft`, `ready`, `published`. Default `draft`.
-* tags — array of tag's slugs
+* tags — an array of tag's slugs
 * content — object with all nodes
 
 **Response**
@@ -93,12 +93,12 @@ updates the post content
 **Request**
 
 * **to**
-  - slug — string, post's slug
+  - slug — string, post's slug.
   - title — string, 140 chars max.
   - status — string, `draft`, `ready`, `published`. Default `draft`.
-  - published — integer. A timestamp when post was published
-  - tags — array of tag's slugs
-  - nodes — array of nodes ids, to change the order of nodes
+  - published — integer. A timestamp when the post is published.
+  - tags — an array of tag's slugs.
+  - nodes — an array of nodes ids, to change the order of nodes.
 
 **Response**
 
