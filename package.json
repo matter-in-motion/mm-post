@@ -17,7 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "async-hooks": "^1.0.0",
-    "bluebird": "^3.5.1",
+    "bluebird": "^3.5.2",
     "mm-errors": "^2.0.0"
   },
   "repository": {
@@ -27,14 +27,14 @@
   "main": "./index",
   "devDependencies": {
     "ava": "^0.25.0",
-    "mm-db-schema": "^1.0.0",
+    "mm-db-schema": "^1.1.1",
     "mm-node": "^2.0.0",
-    "mm-rethinkdb": "^1.0.0",
-    "mm-rethinkdb-schema": "^1.0.0",
-    "mm-rethinkdb-unique": "^1.0.0",
-    "mm-test": "^3.0.0",
+    "mm-rethinkdb": "^1.2.0",
+    "mm-rethinkdb-schema": "^1.1.1",
+    "mm-rethinkdb-unique": "^2.0.0",
+    "mm-test": "^3.1.0",
     "mm-user": "^2.0.0",
-    "nyc": "^11.6.0"
+    "nyc": "^13.0.0"
   },
   "scripts": {
     "test": "nyc ava"

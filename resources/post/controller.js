@@ -107,7 +107,7 @@ Controller.prototype.create = function(post) {
     })
     .then(ids => {
       if (ids && ids.length) {
-        post.nodes = ids;
+        post.content = ids;
       }
 
       return this.r.table(this.table)
@@ -117,9 +117,9 @@ Controller.prototype.create = function(post) {
     .then(res => {
       post.id = res.generated_keys[0];
 
-      if (post.nodes) {
-        post.content = nodes.reduce(function(a, b, i) {
-          a[post.nodes[i]] = b;
+      if (post.content) {
+        post.nodes = nodes.reduce(function(a, b, i) {
+          a[post.content[i]] = b;
           return a;
         }, {});
       }
@@ -182,7 +182,7 @@ Controller.prototype.delete = function(id) {
       return changes;
     })
     .then(changes => {
-      const nodes = changes.old_val.nodes;
+      const nodes = changes.old_val.content;
       return nodes ? this.nodes.deleteAll(nodes).then(() => changes) :
         changes
     })
@@ -344,9 +344,9 @@ Controller.prototype.includeContent = function(query) {
   let nodeTable = this.nodes.table;
 
   return query.merge(post => r.branch(
-    post.hasFields('nodes'),
+    post.hasFields('content'),
     {
-      content: post('nodes')
+      nodes: post('content')
         .map(id => r.expr([
           id,
           r.table(nodeTable)
@@ -390,16 +390,16 @@ Controller.prototype.createNode = function(id, node, index) {
     .then(ids => r.table(this.table)
       .get(id)
       .replace(row => {
-        const nodes = r.branch(
-          row.hasFields('nodes'),
-          row('nodes'),
+        const content = r.branch(
+          row.hasFields('content'),
+          row('content'),
           r.expr([])
         );
 
         return r.branch(
-          r.expr(index !== -1).and(nodes.count().gt(index)),
-          row.merge({ nodes: nodes.insertAt(index, ids[0]) }),
-          row.merge({ nodes: nodes.append(ids[0]) })
+          r.expr(index !== -1).and(content.count().gt(index)),
+          row.merge({ content: content.insertAt(index, ids[0]) }),
+          row.merge({ content: content.append(ids[0]) })
         );
       })
       .run()
@@ -412,7 +412,7 @@ Controller.prototype.deleteNode = function(id, nodeId) {
     .then(() => this.r.table(this.table)
       .get(id)
       .replace(row => row.merge({
-        nodes: row('nodes')
+        content: row('content')
           .setDifference([ nodeId ])
       }))
       .run()

@@ -134,7 +134,12 @@ module.exports = {
           title: types.title(),
           status: types.status(),
           tags: types.tags(),
-          content: types.nodes()
+          content: {
+            type: 'array',
+            items: {
+              type: 'object'
+            }
+          }
         }
       },
       response: types.post(),
@@ -173,7 +178,7 @@ module.exports = {
               slug: types.slug(),
               title: types.title(),
               status: types.status(),
-              nodes: types.nodes(),
+              content: types.content(),
               tags: types.tags(),
               published: {
                 type: 'number',

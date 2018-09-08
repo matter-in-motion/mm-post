@@ -35,8 +35,8 @@ The post is the ordered collection of nodes.
 * __published__ — integer. A timestamp when the post is published.
 * author — uuid or user data of the post's author.
 * tags — the array of tag's slugs.
-* nodes — the array of nodes ids.
-* content — object with all nodes.
+* nodes — object with all nodes.
+* content — the array of nodes ids.
 
 ## API
 
@@ -98,7 +98,7 @@ updates the post content
   - status — string, `draft`, `ready`, `published`. Default `draft`.
   - published — integer. A timestamp when the post is published.
   - tags — an array of tag's slugs.
-  - nodes — an array of nodes ids, to change the order of nodes.
+  - content — an array of nodes ids, to change the order of nodes.
 
 **Response**
 

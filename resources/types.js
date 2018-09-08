@@ -37,12 +37,15 @@ const date = () => ({
   ]
 });
 
-const nodes = () => ({
+const content = () => ({
   type: 'array',
-  items: {
-    type: 'object'
-  }
+  items: { format: 'uuid' }
 });
+
+const nodes = () => ({
+  type: 'object',
+  propertyNames: { format: 'uuid' }
+})
 
 const title = () => ({
   type: 'string',
@@ -71,13 +74,10 @@ const post = () => ({
       type: 'number',
       minValue: 0
     },
-    tag: tags(),
+    tags: tags(),
     nodes: nodes(),
-    content: {
-      type: 'object',
-      propertyNames: { format: 'uuid' }
-    }
+    content: content()
   }
 })
 
-module.exports = { slug, status, date, title, tags, nodes, order, post };
+module.exports = { slug, status, date, title, tags, nodes, content, order, post };

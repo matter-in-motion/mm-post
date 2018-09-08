@@ -117,10 +117,10 @@ test.serial('creates a post with content and checks the order of content', t => 
     t.is(post.status, 'draft');
     t.is(post.created, post.published);
     t.regex(post.id, rxUUID);
-    t.is(post.nodes.length, 3);
+    t.is(post.content.length, 3);
 
-    post.nodes.forEach((id, i) => {
-      t.is(post.content[id].content, `${i}`);
+    post.content.forEach((id, i) => {
+      t.is(post.nodes[id].content, `${i}`);
     });
   })
 );
@@ -296,9 +296,9 @@ test.serial('checks the nodes order', t => post
     include: [ 'content' ]
   })
   .then(post => {
-    nids = post.nodes;
-    post.nodes.forEach((id, i) => {
-      t.is(post.content[id].content, `${i}`);
+    nids = post.content;
+    post.content.forEach((id, i) => {
+      t.is(post.nodes[id].content, `${i}`);
     });
   })
 );
