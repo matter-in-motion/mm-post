@@ -279,19 +279,19 @@ Controller.prototype.filterDates = function(query, name, value) {
 };
 
 Controller.prototype.filterStatus = function(query, value) {
-  if (value !== undefined) {
-    const r = this.r;
-    const filter = value === 'published' ?
-      r.and(
-        r.row('status').eq(value),
-        r.row('published').le(Date.now())
-      ) :
-      r.row('status').eq(value)
-
-    return query.filter(filter);
+  if (value === undefined || value === '*') {
+    return query;
   }
 
-  return query;
+  const r = this.r;
+  const filter = value === 'published' ?
+    r.and(
+      r.row('status').eq(value),
+      r.row('published').le(Date.now())
+    ) :
+    r.row('status').eq(value)
+
+  return query.filter(filter);
 };
 
 Controller.prototype.filterAuthor = function(query, value) {

@@ -56,7 +56,7 @@ or
 
 or
 
-* status — filter by post's status.
+* status — filter by post's status. Use `*` or leave it `undefined` to return posts with any status.
 * created — integer or array, timestamp, to filter the posts by created date. When two timestamps in the array provided, returns only posts between this timestamps.
 * published — integer or array, timestamp, to filter posts by published date. When two timestamps in the array provided, returns only posts between this timestamps.
 * author — uuid, to filter posts by its author.
