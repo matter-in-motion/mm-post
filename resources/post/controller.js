@@ -62,7 +62,7 @@ Controller.prototype.get = function(opts) {
 };
 
 Controller.prototype._get = function(opts) {
-  let q = this.select(opts);
+  const q = this.select(opts);
 
   if (opts.quantity) {
     return q.count();
@@ -74,6 +74,10 @@ Controller.prototype._get = function(opts) {
 Controller.prototype.willCreate = function(post) {
   if (post.id) {
     throw new Error('New post data has a forbidden property id');
+  }
+
+  if (post.slug) {
+    return this.unique.ensure(this.slugs, post.slug);
   }
 };
 
@@ -95,11 +99,6 @@ Controller.prototype.create = function(post) {
   }
 
   return Promise.resolve(post)
-    .then(post => {
-      if (post.slug) {
-        return this.unique.ensure(this.slugs, post.slug);
-      }
-    })
     .then(() => {
       if (nodes) {
         return this.nodes.create(nodes);
@@ -218,10 +217,9 @@ Controller.prototype.include = function(q, opts) {
   });
 
   if (!content) {
-    q = q.merge(post => ({
-      content: post.hasFields('nodes')
-    })).without('nodes')
+    q = q.without('nodes')
   }
+
   return q;
 };
 
@@ -340,8 +338,8 @@ Controller.prototype.filterTags = function(query, tags) {
 
 // includes
 Controller.prototype.includeContent = function(query) {
-  let r = this.r;
-  let nodeTable = this.nodes.table;
+  const r = this.r;
+  const nodeTable = this.nodes.table;
 
   return query.merge(post => r.branch(
     post.hasFields('content'),

@@ -75,7 +75,7 @@ test.serial('gets a post by id without content', t => post
     t.is(post.created, post1.created);
     t.is(post.status, post1.status);
     t.is(post.slug, post1.slug);
-    t.false(post.content);
+    t.is(post.content, undefined);
   })
 )
 
@@ -88,7 +88,7 @@ test.serial('gets a post by slug without content', t => post
     t.is(post.created, post1.created);
     t.is(post.status, post1.status);
     t.is(post.slug, post1.slug);
-    t.false(post.content);
+    t.is(post.content, undefined);
   })
 )
 
