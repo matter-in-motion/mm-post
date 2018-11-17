@@ -144,6 +144,17 @@ test.serial('gets a post by id with content', t => post
   .then(post => t.deepEqual(post, post2))
 );
 
+test.serial('gets a post by id without content', t => post
+  .get({
+    id: post2.id
+  })
+  .then(post => {
+    t.is(post.id, post2.id);
+    t.is(post.content, undefined);
+    t.is(post.nodes, undefined);
+  })
+);
+
 test.serial('gets a post by slug with content', t => post
   .get({
     slug: post2.slug,

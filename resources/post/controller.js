@@ -217,7 +217,7 @@ Controller.prototype.include = function(q, opts) {
   });
 
   if (!content) {
-    q = q.without('nodes')
+    q = q.without('content')
   }
 
   return q;
