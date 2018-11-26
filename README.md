@@ -20,8 +20,7 @@ This extension adds a __post__ resource. It also requires [mm-node](https://gith
 
 ## Settings
 
-* post
-  - limit — number, default 20. Global limit number of post collection
+There is no settings for this extension.
 
 ## Post
 
@@ -62,7 +61,7 @@ or
 * author — uuid, to filter posts by its author.
 * tags — an array of tag's slugs to filter by. You can use `-tag` to filter *out* posts that *have* this tag.
 * order — string, the field name to order the posts by. Possible values `published`, `-published`, `created`, `-created`.
-* limit — number, limit the number of returned posts. Can't be bigger than the limit in the settings.
+* limit — number, limit the number of returned posts.
 * quantity — boolean, returns a number of posts instead of posts itself.
 
 

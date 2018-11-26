@@ -60,8 +60,7 @@ module.exports = {
         },
         limit: {
           type: 'integer',
-          minimum: 1,
-          maximum: this.settings.limit
+          minimum: 1
         },
         quantity: {
           type: 'boolean'

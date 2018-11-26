@@ -47,13 +47,11 @@ Controller.prototype.__init = function(units) {
   this.unique = units.require('db.rethinkdb.unique');
   this.nodes = units.require('node.controller');
   this.users = units.require('user.controller');
-  this.settings = Object.assign({ limit: 20 }, units.require('core.settings').post);
 };
 
 Controller.prototype.get = function(opts) {
   return new Promise((resolve, reject) => {
     try {
-      opts.limit = opts.id ? undefined : Math.min(opts.limit, this.settings.limit);
       resolve(this._get(opts).catch(notFound));
     } catch (e) {
       reject(e);
@@ -62,10 +60,14 @@ Controller.prototype.get = function(opts) {
 };
 
 Controller.prototype._get = function(opts) {
-  const q = this.select(opts);
+  let q = this.select(opts);
 
   if (opts.quantity) {
     return q.count();
+  }
+
+  if (opts.limit) {
+    q = q.limit(opts.limit);
   }
 
   return this.include(q, opts.include);
