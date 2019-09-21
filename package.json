@@ -16,9 +16,8 @@
   "author": "Alexey Novikov <v@2dubs.com> (http://2dubs.com)",
   "license": "MIT",
   "dependencies": {
-    "async-hooks": "^1.0.0",
-    "bluebird": "^3.5.1",
-    "mm-errors": "^2.0.0"
+    "async-hooks": "^1.2.0",
+    "mm-errors": "^2.0.1"
   },
   "repository": {
     "type": "git",
@@ -26,15 +25,15 @@
   },
   "main": "./index",
   "devDependencies": {
-    "ava": "^0.25.0",
+    "ava": "^2.0.0",
     "mm-db-schema": "^1.0.0",
-    "mm-node": "^2.0.0",
+    "mm-node": "^2.0.1",
     "mm-rethinkdb": "^1.0.0",
     "mm-rethinkdb-schema": "^1.0.0",
-    "mm-rethinkdb-unique": "^1.0.0",
+    "mm-rethinkdb-unique": "^2.0.0",
     "mm-test": "^3.0.0",
     "mm-user": "^2.0.0",
-    "nyc": "^11.6.0"
+    "nyc": "^14.0.0"
   },
   "scripts": {
     "test": "nyc ava"
