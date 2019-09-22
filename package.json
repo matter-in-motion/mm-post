@@ -1,6 +1,6 @@
 {
   "name": "mm-post",
-  "version": "2.0.0",
+  "version": "3.0.3",
   "description": "Post resource extension for Matter In Motion",
   "keywords": [
     "matter",
@@ -26,12 +26,12 @@
   "main": "./index",
   "devDependencies": {
     "ava": "^2.0.0",
-    "mm-db-schema": "^1.0.0",
+    "mm-db-schema": "^1.1.1",
     "mm-node": "^2.0.1",
-    "mm-rethinkdb": "^1.0.0",
-    "mm-rethinkdb-schema": "^1.0.0",
+    "mm-rethinkdb": "^1.2.0",
+    "mm-rethinkdb-schema": "^1.1.1",
     "mm-rethinkdb-unique": "^2.0.0",
-    "mm-test": "^3.0.0",
+    "mm-test": "^3.1.0",
     "mm-user": "^2.0.0",
     "nyc": "^14.0.0"
   },

@@ -20,8 +20,7 @@ This extension adds a __post__ resource. It also requires [mm-node](https://gith
 
 ## Settings
 
-* post
-  - limit — number, default 20. Global limit number of post collection
+There is no settings for this extension.
 
 ## Post
 
@@ -35,8 +34,8 @@ The post is the ordered collection of nodes.
 * __published__ — integer. A timestamp when the post is published.
 * author — uuid or user data of the post's author.
 * tags — the array of tag's slugs.
-* nodes — the array of nodes ids.
-* content — object with all nodes.
+* nodes — object with all nodes.
+* content — the array of nodes ids.
 
 ## API
 
@@ -56,13 +55,13 @@ or
 
 or
 
-* status — filter by post's status.
+* status — filter by post's status. Use `*` or leave it `undefined` to return posts with any status.
 * created — integer or array, timestamp, to filter the posts by created date. When two timestamps in the array provided, returns only posts between this timestamps.
 * published — integer or array, timestamp, to filter posts by published date. When two timestamps in the array provided, returns only posts between this timestamps.
 * author — uuid, to filter posts by its author.
 * tags — an array of tag's slugs to filter by. You can use `-tag` to filter *out* posts that *have* this tag.
 * order — string, the field name to order the posts by. Possible values `published`, `-published`, `created`, `-created`.
-* limit — number, limit the number of returned posts. Can't be bigger than the limit in the settings.
+* limit — number, limit the number of returned posts.
 * quantity — boolean, returns a number of posts instead of posts itself.
 
 
@@ -98,7 +97,7 @@ updates the post content
   - status — string, `draft`, `ready`, `published`. Default `draft`.
   - published — integer. A timestamp when the post is published.
   - tags — an array of tag's slugs.
-  - nodes — an array of nodes ids, to change the order of nodes.
+  - content — an array of nodes ids, to change the order of nodes.
 
 **Response**
 

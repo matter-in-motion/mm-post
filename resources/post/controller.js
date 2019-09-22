@@ -73,10 +73,14 @@ class Controller {
   }
 
   _get(opts) {
-    let q = this.select(opts);
+    const q = this.select(opts);
 
     if (opts.quantity) {
       return q.count();
+    }
+
+    if (opts.limit) {
+      q = q.limit(opts.limit);
     }
 
     return this.include(q, opts.include);
@@ -118,7 +122,7 @@ class Controller {
       })
       .then(ids => {
         if (ids && ids.length) {
-          post.nodes = ids;
+          post.content = ids;
         }
 
         return this.r.table(this.table)
@@ -128,9 +132,9 @@ class Controller {
       .then(res => {
         post.id = res.generated_keys[0];
 
-        if (post.nodes) {
-          post.content = nodes.reduce(function(a, b, i) {
-            a[post.nodes[i]] = b;
+        if (post.content) {
+          post.nodes = nodes.reduce(function(a, b, i) {
+            a[post.content[i]] = b;
             return a;
           }, {});
         }
@@ -202,7 +206,7 @@ class Controller {
         return changes;
       })
       .then(changes => {
-        const nodes = changes.old_val.nodes;
+        const nodes = changes.old_val.content;
         return nodes ? this.nodes.deleteAll(nodes).then(() => changes) :
           changes
       })
@@ -214,7 +218,7 @@ class Controller {
 
   select(opts) {
     const r = this.r;
-    let q = r.table(this.table);
+    const q = r.table(this.table);
     q = this.getSelection(q, opts);
 
     if (!(opts.id || opts.slug)) {
@@ -239,9 +243,7 @@ class Controller {
 
     // if content isn't included set content true|flase
     if (!content) {
-      q = q.merge(post => ({
-        content: post.hasFields('nodes')
-      })).without('nodes')
+      q = q.without('content')
     }
     return q;
   }
@@ -300,27 +302,27 @@ class Controller {
   }
 
   filterStatus(query, value) {
-    if (value !== undefined) {
-      const r = this.r;
-      const filter = value === 'published' ?
-        r.and(
-          r.row('status').eq(value),
-          r.row('published').le(Date.now())
-        ) :
-        r.row('status').eq(value)
-
-      return query.filter(filter);
+    if (value === undefined || value === '*') {
+      return query;
     }
 
-    return query;
+    const r = this.r;
+    const filter = value === 'published' ?
+      r.and(
+        r.row('status').eq(value),
+        r.row('published').le(Date.now())
+      ) :
+      r.row('status').eq(value)
+
+    return query.filter(filter);
   }
 
   filterAuthor(query, value) {
-    if (value) {
-      return query.filter(this.r.row('author').eq(value));
+    if (!value) {
+      return query;
     }
 
-    return query;
+    return query.filter(this.r.row('author').eq(value));
   }
 
   filterTags(query, tags) {
@@ -361,13 +363,13 @@ class Controller {
 
   // includes
   includeContent(query) {
-    let r = this.r;
-    let nodeTable = this.nodes.table;
+    const r = this.r;
+    const nodeTable = this.nodes.table;
 
     return query.merge(post => r.branch(
-      post.hasFields('nodes'),
+      post.hasFields('content'),
       {
-        content: post('nodes')
+        nodes: post('content')
           .map(id => r.expr([
             id,
             r.table(nodeTable)
@@ -411,16 +413,16 @@ class Controller {
       .then(ids => r.table(this.table)
         .get(id)
         .replace(row => {
-          const nodes = r.branch(
-            row.hasFields('nodes'),
-            row('nodes'),
+          const content = r.branch(
+            row.hasFields('content'),
+            row('content'),
             r.expr([])
           );
 
           return r.branch(
-            r.expr(index !== -1).and(nodes.count().gt(index)),
-            row.merge({ nodes: nodes.insertAt(index, ids[0]) }),
-            row.merge({ nodes: nodes.append(ids[0]) })
+            r.expr(index !== -1).and(content.count().gt(index)),
+            row.merge({ content: content.insertAt(index, ids[0]) }),
+            row.merge({ content: content.append(ids[0]) })
           );
         })
         .run()
@@ -433,7 +435,7 @@ class Controller {
       .then(() => this.r.table(this.table)
         .get(id)
         .replace(row => row.merge({
-          nodes: row('nodes')
+          content: row('content')
             .setDifference([ nodeId ])
         }))
         .run()
@@ -441,6 +443,5 @@ class Controller {
       );
   }
 }
-
 
 module.exports = Controller;

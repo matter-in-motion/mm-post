@@ -75,7 +75,7 @@ test.serial('gets a post by id without content', t => post
     t.is(post.created, post1.created);
     t.is(post.status, post1.status);
     t.is(post.slug, post1.slug);
-    t.false(post.content);
+    t.is(post.content, undefined);
   })
 )
 
@@ -88,7 +88,7 @@ test.serial('gets a post by slug without content', t => post
     t.is(post.created, post1.created);
     t.is(post.status, post1.status);
     t.is(post.slug, post1.slug);
-    t.false(post.content);
+    t.is(post.content, undefined);
   })
 )
 
@@ -117,10 +117,10 @@ test.serial('creates a post with content and checks the order of content', t => 
     t.is(post.status, 'draft');
     t.is(post.created, post.published);
     t.regex(post.id, rxUUID);
-    t.is(post.nodes.length, 3);
+    t.is(post.content.length, 3);
 
-    post.nodes.forEach((id, i) => {
-      t.is(post.content[id].content, `${i}`);
+    post.content.forEach((id, i) => {
+      t.is(post.nodes[id].content, `${i}`);
     });
   })
 );
@@ -142,6 +142,17 @@ test.serial('gets a post by id with content', t => post
     include: [ 'content' ]
   })
   .then(post => t.deepEqual(post, post2))
+);
+
+test.serial('gets a post by id without content', t => post
+  .get({
+    id: post2.id
+  })
+  .then(post => {
+    t.is(post.id, post2.id);
+    t.is(post.content, undefined);
+    t.is(post.nodes, undefined);
+  })
 );
 
 test.serial('gets a post by slug with content', t => post
@@ -296,9 +307,9 @@ test.serial('checks the nodes order', t => post
     include: [ 'content' ]
   })
   .then(post => {
-    nids = post.nodes;
-    post.nodes.forEach((id, i) => {
-      t.is(post.content[id].content, `${i}`);
+    nids = post.content;
+    post.content.forEach((id, i) => {
+      t.is(post.nodes[id].content, `${i}`);
     });
   })
 );
