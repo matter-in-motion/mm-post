@@ -1,7 +1,8 @@
 'use strict';
 const test = require('ava');
 const extension = require('./index');
-const createApp = require('mm-test').createApp;
+const { createApp } = require('mm-test');
+const { Errors } = require('mm-errors');
 
 const rxUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -41,13 +42,13 @@ test.serial('fails to create post with id', t => post
 test.serial('fails to get uknown post', t => post
   .get({ id: 'fail' })
   .then(() => t.fail())
-  .catch(e => t.is(e.code, 4540))
+  .catch(e => t.is(e.code, Errors.NotFound))
 );
 
 test.serial('fails to update uknown post', t => post
   .update('fail', { title: 'WOW' })
   .then(() => t.fail())
-  .catch(e => t.is(e.code, 4540))
+  .catch(e => t.is(e.code, Errors.NotFound))
 );
 
 let post1
@@ -136,6 +137,11 @@ test.serial('gets all the posts', t => post
   .then(res => t.is(res.length, 2))
 )
 
+test.serial('gets all the posts with limit 1', t => post
+  .get({ limit: 1 })
+  .then(res => t.is(res.length, 1))
+)
+
 test.serial('gets a post by id with content', t => post
   .get({
     id: post2.id,
@@ -144,7 +150,7 @@ test.serial('gets a post by id with content', t => post
   .then(post => t.deepEqual(post, post2))
 );
 
-test.serial('gets a post by id without content', t => post
+test.serial('gets a post by id without content again', t => post
   .get({
     id: post2.id
   })
@@ -348,5 +354,5 @@ test.serial('changes post slug', t => post
 test.serial('fails to update post slug to exited one', t => post
   .update(post2.id, { slug: 'newslug' })
   .then(() => t.fail())
-  .catch(err => t.is(err.code, 4500))
+  .catch(err => t.is(err.code, Errors.Duplicate))
 );

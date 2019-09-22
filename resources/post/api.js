@@ -1,10 +1,10 @@
 'use strict';
-const errors = require('mm-errors');
+const { Errors, ServerError, ifError } = require('mm-errors');
 const types = require('../types');
 
 const ReqlDriverError = function(e) {
   if (e.name === 'ReqlDriverError') {
-    throw errors.ServerError(null, e.msg);
+    throw ServerError(null, e.msg);
   } else {
     throw e;
   }
@@ -111,7 +111,7 @@ module.exports = {
 
         return this.get(data)
           .catch(ReqlDriverError)
-          .catch(errors.ifError('NotFound'));
+          .catch(ifError(Errors.NotFound));
       }
     }
   },
@@ -150,7 +150,7 @@ module.exports = {
         return this
           .create(data)
           .catch(ReqlDriverError)
-          .catch(errors.ifError('BadRequest'));
+          .catch(ifError(Errors.BadRequest));
       }
     }
   },
@@ -193,7 +193,7 @@ module.exports = {
       call: (auth, data) => this
         .update(data.id, data.to)
         .catch(ReqlDriverError)
-        .catch(errors.ifError('BadRequest'))
+        .catch(ifError(Errors.BadRequest))
     }
   },
 
@@ -257,7 +257,7 @@ module.exports = {
       call: (auth, data) => this
         .createNode(data.id, data.node, data.index)
         .catch(ReqlDriverError)
-        .catch(errors.ifError('NotFound'))
+        .catch(ifError(Errors.NotFound))
     }
   },
 
@@ -284,7 +284,7 @@ module.exports = {
       call: (auth, data) => this
         .deleteNode(data.id, data.nid)
         .catch(ReqlDriverError)
-        .catch(errors.ifError('NotFound'))
+        .catch(ifError(Errors.NotFound))
     }
   }
 };

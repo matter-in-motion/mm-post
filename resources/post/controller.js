@@ -1,5 +1,6 @@
 'use strict';
 const hooks = require('async-hooks');
+const { NotFound } = require('mm-errors');
 
 const util = require('../../util');
 const toCamelCase = util.toCamelCase;
@@ -7,10 +8,9 @@ const getMethods = util.getMethods;
 
 const isArray = Array.isArray;
 
-const errors = require('mm-errors');
-const notFound = function(e) {
+function RDBNotFound(e) {
   if (e.msg === 'Not found') {
-    throw errors.NotFound();
+    throw NotFound();
   }
 
   throw e;
@@ -41,7 +41,6 @@ class Controller {
     this.nodes = units.require('node.controller');
     this.users = units.require('user.controller');
     this.settings = {
-      limit: 20,
       ...units.require('core.settings').post
     }
   }
@@ -64,8 +63,9 @@ class Controller {
   get(opts) {
     return new Promise((resolve, reject) => {
       try {
-        opts.limit = opts.id ? undefined : Math.min(opts.limit, this.settings.limit);
-        resolve(this._get(opts).catch(notFound));
+        opts.limit = opts.id || !opts.limit ? undefined :
+          this.settings.limit ? Math.min(opts.limit, this.settings.limit) : opts.limit;
+        resolve(this._get(opts).catch(RDBNotFound));
       } catch (e) {
         reject(e);
       }
@@ -73,7 +73,7 @@ class Controller {
   }
 
   _get(opts) {
-    const q = this.select(opts);
+    let q = this.select(opts);
 
     if (opts.quantity) {
       return q.count();
@@ -153,7 +153,7 @@ class Controller {
     return this.select({ id })
       .update(to, { returnChanges: true })('changes')
       .run()
-      .catch(notFound)
+      .catch(RDBNotFound)
       .then(changes => changes[0]);
   }
 
@@ -195,7 +195,7 @@ class Controller {
     return this.select({ id })
       .delete({ returnChanges: true })('changes').nth(0)
       .run()
-      .catch(notFound)
+      .catch(RDBNotFound)
       .then(changes => {
         if (changes.old_val.slug) {
           return this.unique
@@ -218,7 +218,7 @@ class Controller {
 
   select(opts) {
     const r = this.r;
-    const q = r.table(this.table);
+    let q = r.table(this.table);
     q = this.getSelection(q, opts);
 
     if (!(opts.id || opts.slug)) {
@@ -290,15 +290,15 @@ class Controller {
 
   // filters
   filterDates(query, name, value) {
-    if (value) {
-      if (isArray(value)) {
-        return query.between(value[0], value[1], { index: name });
-      }
-
-      return query.filter(this.r.row(name).le(value));
+    if (!value) {
+      return query
     }
 
-    return query;
+    if (isArray(value)) {
+      return query.between(value[0], value[1], { index: name });
+    }
+
+    return query.filter(this.r.row(name).le(value));
   }
 
   filterStatus(query, value) {
@@ -326,7 +326,7 @@ class Controller {
   }
 
   filterTags(query, tags) {
-    if (!tags) {
+    if (!(tags && tags.length)) {
       return query;
     }
 
